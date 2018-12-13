@@ -8,6 +8,11 @@ if (isset($_POST['btn_fed'])) {
   $flash_message = ($avadol->flash_message) ?? null;
   $is_game_over = $avadol->is_game_over;
   $dead_elements = !empty($avadol->elemet_died)? $avadol->elemet_died :  null;
+  
+  // echo "<pre>";
+  // print_r ($_SESSION);
+  // echo "</pre>";
+  
   if(isset($dead_elements)){
     extract($dead_elements);
   }

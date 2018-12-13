@@ -19,13 +19,11 @@ class Avadol {
   public $is_game_over = false;
   public $elements = ['farmer','cow1','cow2','bunny1','bunny2','bunny3','bunny4'];
   public function __construct(){
-    //default elements will take from class declaration and store in session
+    //default elements will take from class declaration and store in session    
     if (!isset($_SESSION['fed_details']['elements'])) {
       $_SESSION['fed_details']['elements'] = $this->elements;
-      $_SESSION['fed_details']['turn'] = $this->current_turn;
-    }else {
+    }else{
       $this->elements = $_SESSION['fed_details']['elements'];
-      $this->current_turn = (int) $_SESSION['fed_details']['turn'];
       $this->fed_details = $_SESSION['fed_details']['fedding'];
     }
     if(isset($_SESSION['fed_details']['died'])){
@@ -39,17 +37,20 @@ class Avadol {
   public function fedRandomly(){    
     $random_fed = array_rand($this->elements,1);
     $this->current_fed = $this->elements[$random_fed];
+    $this->current_turn = $_SESSION['fed_details']['turn'] ?? $this->current_turn;
     $this->current_turn++;
     $_SESSION['fed_details']['turn'] = $this->current_turn;
     $_SESSION['fed_details']['fedding'][] = array('turn'=>$this->current_turn,$this->current_fed=>1);
-    $_SESSION['fed_details']['fed_to'][] = $this->current_fed;    
+    $_SESSION['fed_details']['fed_to'][] = $this->current_fed;
+    $this->elements = $_SESSION['fed_details']['elements'];
+    $this->fed_details = $_SESSION['fed_details']['fedding']; 
     if($this->validateElements()){
       if($this->current_turn>=COUNT_LIMIT){
         $this->flash_message = 'Fed count is reach to its limit!!!';
         $this->is_game_over = true;
         return FALSE;
       }
-    }
+    }    
     return TRUE;
   }
   /**
